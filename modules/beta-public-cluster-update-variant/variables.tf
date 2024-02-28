@@ -548,6 +548,7 @@ variable "enable_tpu" {
   description = "Enable Cloud TPU resources in the cluster. WARNING: changing this after cluster creation is destructive!"
   default     = false
 }
+
 variable "network_policy" {
   type        = bool
   description = "Enable network policy addon"
@@ -779,4 +780,10 @@ variable "enable_gcfs" {
   type        = bool
   description = "Enable image streaming on cluster level."
   default     = false
+}
+
+variable "fleet_project" {
+  description = "(Optional) Register the cluster with the fleet in this project."
+  type        = string
+  default     = null
 }
