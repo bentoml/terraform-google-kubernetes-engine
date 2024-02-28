@@ -526,8 +526,8 @@ resource "google_container_node_pool" "pools" {
   dynamic "placement_policy" {
     for_each = length(lookup(each.value, "placement_policy", "")) > 0 ? [each.value] : []
     content {
-      type         = try(lookup(placement_policy.value, "placement_policy", null).type, null)
-      tpu_topology = try(lookup(placement_policy.value, "placement_policy", null).tpu_topology, null)
+      type         = lookup(placement_policy.value, "placement_policy", null)
+      tpu_topology = lookup(placement_policy.value, "tpu_topology", null)
     }
   }
 
@@ -768,8 +768,8 @@ resource "google_container_node_pool" "windows_pools" {
   dynamic "placement_policy" {
     for_each = length(lookup(each.value, "placement_policy", "")) > 0 ? [each.value] : []
     content {
-      type         = try(lookup(placement_policy.value, "placement_policy", null).type, null)
-      tpu_topology = try(lookup(placement_policy.value, "placement_policy", null).tpu_topology, null)
+      type         = lookup(placement_policy.value, "placement_policy", null)
+      tpu_topology = lookup(placement_policy.value, "tpu_topology", null)
     }
   }
 
