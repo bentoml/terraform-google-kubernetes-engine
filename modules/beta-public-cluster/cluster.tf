@@ -815,6 +815,14 @@ resource "google_container_node_pool" "windows_pools" {
         enabled = gcfs_config.value
       }
     }
+    dynamic "reservation_affinity" {
+      for_each = length(lookup(each.value, "reservation_type", "")) > 0 ? [each.value] : []
+      content {
+        consume_reservation_type = lookup(reservation_affinity.value, "reservation_type", "")
+        key                      = lookup(reservation_affinity.value, "reservation_key", "compute.googleapis.com/reservation-name")
+        values                   = split(",", lookup(reservation_affinity.value, "reservation_values", ""))
+      }
+    }
     dynamic "gvnic" {
       for_each = lookup(each.value, "enable_gvnic", false) ? [true] : []
       content {
