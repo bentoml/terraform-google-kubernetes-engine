@@ -727,6 +727,9 @@ resource "google_container_node_pool" "windows_pools" {
     for_each = length(lookup(each.value, "placement_policy", "")) > 0  ? [each.value] : []
     content {
       type = lookup(placement_policy.value, "placement_policy", null)
+      {% if beta_cluster %}
+      tpu_topology = lookup(placement_policy.value, "tpu_topology", null)
+      {% endif %}
     }
   }
 
@@ -776,6 +779,18 @@ resource "google_container_node_pool" "windows_pools" {
           enabled = gcfs_config.value
         }
     }
+    {% if beta_cluster %}
+
+    dynamic "reservation_affinity" {
+      for_each = length(lookup(each.value, "reservation_type", "")) > 0 ? [each.value] : []
+      content {
+        consume_reservation_type = lookup(reservation_affinity.value, "reservation_type", "")
+        key                      = lookup(reservation_affinity.value, "reservation_key", "compute.googleapis.com/reservation-name")
+        values                   = split(",", lookup(reservation_affinity.value, "reservation_values", ""))
+      }
+    }
+
+    {% endif %}
     dynamic "gvnic" {
       for_each = lookup(each.value, "enable_gvnic", false) ? [true] : []
       content {

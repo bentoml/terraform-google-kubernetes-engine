@@ -545,7 +545,8 @@ resource "google_container_node_pool" "pools" {
   dynamic "placement_policy" {
     for_each = length(lookup(each.value, "placement_policy", "")) > 0 ? [each.value] : []
     content {
-      type = lookup(placement_policy.value, "placement_policy", null)
+      type         = lookup(placement_policy.value, "placement_policy", null)
+      tpu_topology = lookup(placement_policy.value, "tpu_topology", null)
     }
   }
 
@@ -591,6 +592,16 @@ resource "google_container_node_pool" "pools" {
         enabled = gcfs_config.value
       }
     }
+
+    dynamic "reservation_affinity" {
+      for_each = length(lookup(each.value, "reservation_type", "")) > 0 ? [each.value] : []
+      content {
+        consume_reservation_type = lookup(reservation_affinity.value, "reservation_type", "")
+        key                      = lookup(reservation_affinity.value, "reservation_key", "compute.googleapis.com/reservation-name")
+        values                   = split(",", lookup(reservation_affinity.value, "reservation_values", ""))
+      }
+    }
+
     dynamic "gvnic" {
       for_each = lookup(each.value, "enable_gvnic", false) ? [true] : []
       content {
@@ -786,7 +797,8 @@ resource "google_container_node_pool" "windows_pools" {
   dynamic "placement_policy" {
     for_each = length(lookup(each.value, "placement_policy", "")) > 0 ? [each.value] : []
     content {
-      type = lookup(placement_policy.value, "placement_policy", null)
+      type         = lookup(placement_policy.value, "placement_policy", null)
+      tpu_topology = lookup(placement_policy.value, "tpu_topology", null)
     }
   }
 
@@ -832,6 +844,16 @@ resource "google_container_node_pool" "windows_pools" {
         enabled = gcfs_config.value
       }
     }
+
+    dynamic "reservation_affinity" {
+      for_each = length(lookup(each.value, "reservation_type", "")) > 0 ? [each.value] : []
+      content {
+        consume_reservation_type = lookup(reservation_affinity.value, "reservation_type", "")
+        key                      = lookup(reservation_affinity.value, "reservation_key", "compute.googleapis.com/reservation-name")
+        values                   = split(",", lookup(reservation_affinity.value, "reservation_values", ""))
+      }
+    }
+
     dynamic "gvnic" {
       for_each = lookup(each.value, "enable_gvnic", false) ? [true] : []
       content {
