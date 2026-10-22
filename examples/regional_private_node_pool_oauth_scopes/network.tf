@@ -16,7 +16,7 @@
 
 module "gke-network" {
   source  = "terraform-google-modules/network/google"
-  version = ">= 7.5"
+  version = ">= 7.5, < 9.0"
 
   project_id   = var.project_id
   network_name = "random-gke-network"
