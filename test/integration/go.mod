@@ -1,13 +1,12 @@
 module github.com/terraform-google-modules/terraform-google-kubernetes-engine/test/integration
 
-go 1.21
-
-toolchain go1.21.5
+go 1.26.10
 
 require (
 	github.com/GoogleCloudPlatform/cloud-foundation-toolkit/infra/blueprint-test v0.12.1
 	github.com/gruntwork-io/terratest v0.46.11
 	github.com/stretchr/testify v1.8.4
+	github.com/tidwall/gjson v1.17.0
 )
 
 require (
@@ -71,7 +70,6 @@ require (
 	github.com/pquerna/otp v1.4.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/tidwall/gjson v1.17.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
